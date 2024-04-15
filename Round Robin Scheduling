@@ -1,0 +1,43 @@
+#include<stdio.h>
+void main(){
+ int n,i,tq,tot_wt=0,tot_tat=0,total=0,completed=0;
+ float avg_tat,avg_wt;
+ printf("Enter the no. of processes:");
+ scanf("%d",&n);
+ int p[n],bt[n],wt[n],tat[n],rm_time[n];
+ for(i=1;i<=n;i++){
+  printf("Enter the burst time of process %d:",i);
+  scanf("%d",&bt[i]);
+  rm_time[i]=bt[i];
+  p[i]=i;
+ }
+ printf("Enter the Time Quatum:");
+ scanf("%d",&tq);
+ while(completed<n){
+  for(i=1;i<=n;i++){
+   if(rm_time[i]>0){
+    if(rm_time[i]>tq){
+     rm_time[i]=rm_time[i]-tq;
+     total=total+tq;
+    }
+    else{
+     total=total+rm_time[i];
+     rm_time[i]=0;
+     wt[i]=total-bt[i];
+     tat[i]=total;
+     completed++;
+    }
+   }
+  }
+ }
+ printf("Process\t BT\t WT\t TAT\n");
+ for(i=1;i<=n;i++){
+  printf("%d\t   %d\t  %d\t  %d\n",p[i],bt[i],wt[i],tat[i]);
+  tot_wt=tot_wt+wt[i];
+  tot_tat=tot_tat+tat[i];
+ }
+ avg_wt=(float)tot_wt/n;
+ avg_tat=(float)tot_tat/n;
+ printf("Total WT=%d\tAverage WT=%fms\nTotal TAT=%d\tAverage TAT=%fms\n",tot_wt,avg_wt,tot_tat,avg_tat);
+}
+
