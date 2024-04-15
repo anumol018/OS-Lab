@@ -1,0 +1,61 @@
+#include<stdio.h>
+
+void producer();
+void consumer();
+int mutex=1,empty=3,full=0; 
+
+int wait(int s){
+  s--;
+ return s;
+}
+
+int signal(int s){
+ s++;
+ return s;
+}
+
+void main(){
+ int choice;
+ while(choice!=3){
+  printf("Enter the choice\n1.produce\t2.consume\nChoice:");
+  scanf("%d",&choice);
+  switch(choice){
+   case 1:{
+     if(mutex==1&&empty!=0){
+      producer();
+      printf("Data is produced\n");
+     }
+     else{
+      printf("BUFFER FULL\n");
+     }
+     break;
+   }
+   case 2:{
+     if(mutex==1&&full!=0){
+      consumer(); 
+      printf("Data is consumed\n");  
+     }
+     else {
+      printf("BUFFER EMPTY\n");
+     }
+     break;
+   }
+   case 3:
+     printf("EXITED!!\n");
+  }
+ }
+}
+ 
+void producer(){
+ mutex=wait(mutex);
+ full=signal(full);
+ empty=wait(empty);
+ mutex=signal(mutex);
+}
+
+void consumer(){
+ mutex=wait(mutex);
+ empty=signal(empty);
+ full=wait(full);
+ mutex=signal(mutex);
+}
